@@ -1,0 +1,4 @@
+name: wcag
+channels:
+  - defaults
+prefix: /home/dan/miniconda3/envs/wcag

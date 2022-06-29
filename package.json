@@ -1,0 +1,17 @@
+{
+  "name": "wcag-batch",
+  "version": "1.0.0",
+  "description": "Batch-test a website's accessibility with pa11y using a .csv input list of URLs, saving the results to a .csv file.",
+  "main": "wcag-batch.js",
+  "scripts": {
+    "batch": "node wcag-batch.js gwpa/short.csv gwpa/results.csv",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Tompkins",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.4",
+    "csv": "^6.1.4",
+    "pa11y": "^6.2.3"
+  }
+}
