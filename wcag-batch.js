@@ -35,7 +35,7 @@ const total = urls.length;
 
 /* Create a Pa11y test runner
  * ----------------------------------------- */
-const concurrency = 8; // Change the concurrency here to run more tests in parallel
+const concurrency = 4; // Change the concurrency here to run more tests in parallel
 const queue = createQueue(processUrl, concurrency); // Create our queue
 queue.push(urls); // push all URLs to the queue
 
@@ -52,18 +52,23 @@ function processUrl(url, done) {
                 // Set error count based on pa11y runner results
                 errorCount = results.issues.filter(result => result.type === 'error').length;
                 const issues = results.issues; // Get issues
+                let local_array = [];
                 issues.forEach(issue => { // Build array from results
-                    all_results.push(results.pageUrl);
-                    all_results.push(results.documentTitle);
-                    all_results.push(issue.code);
-                    all_results.push(issue.type);
-                    all_results.push(issue.typeCode);
-                    all_results.push(issue.message);
-                    all_results.push(issue.context);
-                    all_results.push(issue.selector);
-                    all_results.push(issue.runner);
-                    all_results.push(issue.runnerExtras);
+                    let row_array = [];
+                    row_array.push(results.pageUrl);
+                    row_array.push(results.documentTitle);
+                    row_array.push(issue.code);
+                    row_array.push(issue.type);
+                    row_array.push(issue.typeCode);
+                    row_array.push(issue.message);
+                    row_array.push(issue.context);
+                    row_array.push(issue.selector);
+                    row_array.push(issue.runner);
+                    row_array.push(issue.runnerExtras);
+                    local_array.push(row_array);
                 });
+                all_results.push(local_array);
+                console.log(local_array.length);
             }
             console.log(`Finished testing ${url}: ${errorCount} errors`);
         }
@@ -81,7 +86,9 @@ function processUrl(url, done) {
 function queueDrained(pa11y_results) {
     console.log('Finished processing all URLs!');
     pa11y_results.forEach((result) => {
-        stringifier.write(result);
+        result.forEach((row) => {
+            stringifier.write(row);
+        });
     });
     stringifier.pipe(fs.createWriteStream(output_filename));
 }
